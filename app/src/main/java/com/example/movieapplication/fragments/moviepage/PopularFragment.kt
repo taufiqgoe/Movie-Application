@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapplication.adapters.MovieAdapter
 import com.example.movieapplication.databinding.FragmentPopularBinding
@@ -18,6 +19,8 @@ class PopularFragment : Fragment() {
     private var _binding: FragmentPopularBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainViewModel by viewModels()
+
+    @ExperimentalPagingApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,7 +29,7 @@ class PopularFragment : Fragment() {
 
         val adapter = MovieAdapter()
 
-        viewModel.getPopularWithPage()
+        viewModel.getPopularWithDb()
         viewModel.data.observe(viewLifecycleOwner, {
             if (it != null) {
                 adapter.submitData(lifecycle, it)
