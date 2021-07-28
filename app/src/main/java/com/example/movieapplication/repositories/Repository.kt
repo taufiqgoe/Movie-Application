@@ -33,7 +33,7 @@ class Repository @Inject constructor(
     fun getPopularWithDb(): LiveData<PagingData<Movie>> {
         return Pager(
             config = PagingConfig(20, maxSize = 100, enablePlaceholders = true),
-            remoteMediator = MovieMediator(api, database)
+            remoteMediator = MovieMediator(api, database, MovieMediator.RequestType.Popular)
         ) {
             movieDao.pagingSource()
         }.liveData
