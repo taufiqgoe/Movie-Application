@@ -10,16 +10,39 @@ import com.example.movieapplication.api.Api
 import com.example.movieapplication.database.AppDatabase
 import com.example.movieapplication.models.Movie
 import com.example.movieapplication.models.MovieKey
+import com.example.movieapplication.models.MovieResponse
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
 class MovieMediator(
     private val api: Api,
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val requestType: RequestType
 ) : RemoteMediator<Int, Movie>() {
     private val movieDao = database.movieDao()
     private val movieKeyDao = database.movieKeyDao()
+
+    enum class RequestType {
+        Popular, TopRated, Upcoming
+    }
+
+    private suspend fun request(requestType: RequestType, nextPage: Int?): Response<MovieResponse> {
+        return when (requestType) {
+            RequestType.Popular -> {
+                api.getPopularMovie(Api.API_KEY, nextPage ?: 1)
+            }
+
+            RequestType.TopRated -> {
+                api.getTopRatedMovie(Api.API_KEY, nextPage ?: 1)
+            }
+
+            RequestType.Upcoming -> {
+                api.getUpcomingMovie(Api.API_KEY, nextPage ?: 1)
+            }
+        }
+    }
 
     override suspend fun load(
         loadType: LoadType,
@@ -53,7 +76,8 @@ class MovieMediator(
                 }
             }
 
-            val response = api.getPopularMovie(Api.API_KEY, nextPage ?: 1)
+//            val response = api.getPopularMovie(Api.API_KEY, nextPage ?: 1)
+            val response = request(requestType, nextPage)
             Log.d("MovieMediator", "request: $nextPage")
 
             database.withTransaction {

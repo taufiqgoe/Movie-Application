@@ -12,9 +12,20 @@ interface Api {
         const val API_KEY = "35c5a75a379a7127fdb020ad33e74d68"
     }
 
-
     @GET("movie/popular")
     suspend fun getPopularMovie(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<MovieResponse>
+
+    @GET("movie/top_rated")
+    suspend fun getTopRatedMovie(
+        @Query("api_key") apiKey: String,
+        @Query("page") page: Int
+    ): Response<MovieResponse>
+
+    @GET("movie/upcoming")
+    suspend fun getUpcomingMovie(
         @Query("api_key") apiKey: String,
         @Query("page") page: Int
     ): Response<MovieResponse>
