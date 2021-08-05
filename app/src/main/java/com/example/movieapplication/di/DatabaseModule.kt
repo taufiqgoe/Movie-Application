@@ -26,5 +26,5 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRemoteKeyDao(database: AppDatabase) = database.movieKeyDao()
+    fun provideRemoteKeyDao(database: AppDatabase) = database.popularKeyDao()
 }

@@ -1,48 +1,40 @@
 package com.example.movieapplication.viewmodels
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
-import com.example.movieapplication.models.Movie
-import com.example.movieapplication.models.MovieResponse
+import com.example.movieapplication.models.MovieAndPos
 import com.example.movieapplication.repositories.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
-    val myResponse: MutableLiveData<Response<MovieResponse>> = MutableLiveData()
-    lateinit var data: LiveData<PagingData<Movie>>
+    lateinit var popular: LiveData<PagingData<MovieAndPos>>
+    lateinit var topRated: LiveData<PagingData<MovieAndPos>>
+    lateinit var upcoming: LiveData<PagingData<MovieAndPos>>
 
-    fun getPopularMovie(page: Int) {
+    @ExperimentalPagingApi
+    fun getPopularFromDb() {
         viewModelScope.launch {
-            val response = repository.getPopularMovie(page)
-            myResponse.value = response
-        }
-    }
-
-    fun getPopularWithPage() {
-        viewModelScope.launch {
-            data = repository.getPopularWithPage()
+            popular = repository.getPopularFromDb()
         }
     }
 
     @ExperimentalPagingApi
-    fun getPopularWithDb() {
+    fun getTopRatedFromDb() {
         viewModelScope.launch {
-            data = repository.getPopularWithDb()
+            topRated = repository.getTopRatedFromDb()
         }
     }
 
-    fun searchMovie(query: String) {
+    @ExperimentalPagingApi
+    fun getUpcomingFromDb() {
         viewModelScope.launch {
-            val response = repository.searchMovie(query)
-            myResponse.value = response
+            upcoming = repository.getUpcomingFromDb()
         }
     }
 }

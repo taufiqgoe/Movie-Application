@@ -1,26 +1,24 @@
 package com.example.movieapplication.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapplication.databinding.MainItemLayoutBinding
-import com.example.movieapplication.models.Movie
+import com.example.movieapplication.models.MovieAndPos
 
-class MovieAdapter: PagingDataAdapter<Movie, MovieAdapter.ViewHolder>(diffUtil) {
+class MovieAdapter: PagingDataAdapter<MovieAndPos, MovieAdapter.ViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = MainItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie = getItem(position)
+        val item = getItem(position)
         with(holder) {
-            if (movie != null) {
-                binding.tvName.text = movie.title
+            if (item != null) {
+                binding.tvName.text = item.movie.title
             }
         }
     }
@@ -30,10 +28,10 @@ class MovieAdapter: PagingDataAdapter<Movie, MovieAdapter.ViewHolder>(diffUtil) 
     }
 
     companion object {
-        private val diffUtil = object : DiffUtil.ItemCallback<Movie>() {
-            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean = oldItem.id == newItem.id
+        private val diffUtil = object : DiffUtil.ItemCallback<MovieAndPos>() {
+            override fun areItemsTheSame(oldItem: MovieAndPos, newItem: MovieAndPos): Boolean = oldItem.movie.id == newItem.movie.id
 
-            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean = oldItem == newItem
+            override fun areContentsTheSame(oldItem: MovieAndPos, newItem: MovieAndPos): Boolean = oldItem == newItem
         }
     }
 }
