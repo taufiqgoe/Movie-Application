@@ -29,8 +29,8 @@ class PopularFragment : Fragment() {
 
         val adapter = MovieAdapter()
 
-        viewModel.getPopularWithDb()
-        viewModel.data.observe(viewLifecycleOwner, {
+        viewModel.getPopularFromDb()
+        viewModel.popular.observe(viewLifecycleOwner, {
             if (it != null) {
                 adapter.submitData(lifecycle, it)
             } else {
